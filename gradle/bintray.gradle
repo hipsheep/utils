@@ -1,0 +1,63 @@
+apply plugin: 'com.jfrog.bintray'
+
+version = libVersion
+
+task createSourcesJar(type: Jar) {
+  description('Creates a jar file from all the project classes.')
+
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+task createJavadoc(type: Javadoc) {
+	description('Creates the javadoc HTML files for all the project classes.')
+
+	source = android.sourceSets.main.java.srcDirs
+	classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+
+	failOnError false
+}
+
+task createJavadocJar(type: Jar, dependsOn: 'createJavadoc') {
+	description('Creates the javadoc jar for all the project classes.')
+
+	classifier = 'javadoc'
+	from 'build/docs/javadoc/'
+}
+
+artifacts {
+    archives createJavadocJar
+    archives createSourcesJar
+}
+
+// Load properties in local.properties
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty('bintray.user')
+    key = properties.getProperty('bintray.apikey')
+
+    configurations = ['archives']
+
+    pkg {
+        repo = bintrayRepo
+        name = bintrayPackage
+        desc = libDescription
+
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+
+        licenses = allLicenses
+
+        publish = true
+        publicDownloadNumbers = true
+
+        version {
+            desc = libDescription
+            gpg {
+                sign = true // Determines whether to GPG sign the files (the default is false)
+            }
+        }
+    }
+}

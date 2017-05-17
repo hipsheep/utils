@@ -1,0 +1,42 @@
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = mavenGroupId
+
+install {
+    repositories.mavenInstaller {
+        // This generates the POM.xml file with the proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                groupId mavenGroupId
+                artifactId artifact
+
+                // Add your description here
+                name libName
+                description libDescription
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+
+                developers {
+                    developer {
+                        name developerName
+                        email developerEmail
+                    }
+                }
+
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
