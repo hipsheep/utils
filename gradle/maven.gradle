@@ -2,7 +2,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 group = mavenGroupId
 
-// This will set the name of the project aar file taht will be built
+// This will set the name of the project aar file that will be built
 project.archivesBaseName = artifact
 
 install {
